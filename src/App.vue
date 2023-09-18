@@ -64,6 +64,13 @@ function setMode(option: modeType) {
       break
   }
 }
+
+function addZeroToDate(date: number) {
+  if (date < 10) {
+    return `0${date}`
+  }
+  return date
+}
 </script>
 
 <template>
@@ -79,7 +86,11 @@ function setMode(option: modeType) {
         Long break
       </button>
     </section>
-    <p class="counter">{{ new Date(counter).getMinutes() }}:{{ new Date(counter).getSeconds() }}</p>
+    <p class="counter">
+      {{ addZeroToDate(new Date(counter).getMinutes()) }}:{{
+        addZeroToDate(new Date(counter).getSeconds())
+      }}
+    </p>
 
     <div class="btn start" v-if="state === 'idle'">
       <button class="btn start" @click="startCounter">

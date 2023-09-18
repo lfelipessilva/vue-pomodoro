@@ -102,8 +102,10 @@ import TimeCounter from './components/TimeCounter.vue'
 <style scoped>
 main {
   display: flex;
+  height: 100%;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 2rem;
 }
 

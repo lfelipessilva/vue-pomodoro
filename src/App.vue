@@ -1,69 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import MainButton from './components/MainButton.vue'
+import SettingsButton from './components/SettingsButton.vue'
+import TimeCounter from './components/TimeCounter.vue'
 
-type modeType = 'pomodoro' | 'short' | 'long'
-
-let intervalId: any
-const ONE_SECOND_IN_MILLISECONDS = 1 * 1000
-const TWENTY_FIVE_MINUTES_IN_MILLISECONDS = 25 * 60 * 1000
-const FIVE_MINUTES_IN_MILLISECONDS = 1 * 60 * 1000
-const FIFTEEN_MINUTES_IN_MILLISECONDS = 15 * 60 * 1000
-
-const counter = ref(TWENTY_FIVE_MINUTES_IN_MILLISECONDS)
-const state = ref('idle')
-const mode = ref('pomodoro')
-
-const order: modeType[] = ['pomodoro', 'short', 'pomodoro', 'short', 'pomodoro', 'long']
-let orderIndex = 0
-
-function playBell() {
-  var audio = new Audio('/bell.wav')
-  audio.loop = false
-  audio.play()
-}
-
-function changeCounter() {
-  orderIndex > order.length ? 0 : (orderIndex += 1)
-  setMode(order[orderIndex])
-  clearInterval(intervalId)
-  playBell()
-  startCounter()
-}
-
-function startCounter() {
-  state.value = 'running'
-
-  const decrementCounter = () => {
-    counter.value -= ONE_SECOND_IN_MILLISECONDS
-
-    if (counter.value === 0) {
-      changeCounter()
-    }
-  }
-
-  intervalId = setInterval(decrementCounter, 1000)
-}
-
-function stopCounter() {
-  state.value = 'idle'
-  clearInterval(intervalId)
-  intervalId = null
-}
-
-function setMode(option: modeType) {
-  mode.value = option
-  switch (option) {
-    case 'short':
-      counter.value = FIVE_MINUTES_IN_MILLISECONDS
-      break
-    case 'long':
-      counter.value = FIFTEEN_MINUTES_IN_MILLISECONDS
-      break
-    default:
-      counter.value = TWENTY_FIVE_MINUTES_IN_MILLISECONDS
-      break
-  }
-}
+import { timer } from './store/timer.js'
 
 function addZeroToDate(date: number) {
   if (date < 10) {
@@ -71,31 +11,39 @@ function addZeroToDate(date: number) {
   }
   return date
 }
-import MainButton from './components/MainButton.vue'
-import SettingsButton from './components/SettingsButton.vue'
-import TimeCounter from './components/TimeCounter.vue'
 </script>
 
 <template>
   <main>
     <section class="mode-selector">
-      <SettingsButton :class="{ active: mode === 'pomodoro' }" @click="setMode('pomodoro')">
+      <SettingsButton
+        :class="{ active: timer.mode === 'pomodoro' }"
+        @click="timer.changeMode('pomodoro')"
+      >
         Pomodoro
       </SettingsButton>
-      <SettingsButton class="btn" :class="{ active: mode === 'short' }" @click="setMode('short')">
+      <SettingsButton
+        class="btn"
+        :class="{ active: timer.mode === 'short' }"
+        @click="timer.changeMode('short')"
+      >
         Short break
       </SettingsButton>
-      <SettingsButton class="btn" :class="{ active: mode === 'long' }" @click="setMode('long')">
+      <SettingsButton
+        class="btn"
+        :class="{ active: timer.mode === 'long' }"
+        @click="timer.changeMode('long')"
+      >
         Long break
       </SettingsButton>
     </section>
     <TimeCounter>
-      {{ addZeroToDate(new Date(counter).getMinutes()) }}:{{
-        addZeroToDate(new Date(counter).getSeconds())
+      {{ addZeroToDate(new Date(timer.timer).getMinutes()) }}:{{
+        addZeroToDate(new Date(timer.timer).getSeconds())
       }}
     </TimeCounter>
-    <MainButton @click="startCounter" v-if="state === 'idle'">START</MainButton>
-    <MainButton @click="stopCounter" v-if="state === 'running'">STOP</MainButton>
+    <MainButton @click="timer.start()" v-if="timer.state === 'idle'">START</MainButton>
+    <MainButton @click="timer.stop()" v-if="timer.state === 'running'">STOP</MainButton>
   </main>
 </template>
 
@@ -114,3 +62,4 @@ main {
   gap: 1rem;
 }
 </style>
+./store/timer

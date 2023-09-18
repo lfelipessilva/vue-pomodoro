@@ -73,6 +73,7 @@ function addZeroToDate(date: number) {
 }
 import MainButton from './components/MainButton.vue'
 import SettingsButton from './components/SettingsButton.vue'
+import TimeCounter from './components/TimeCounter.vue'
 </script>
 
 <template>
@@ -88,7 +89,7 @@ import SettingsButton from './components/SettingsButton.vue'
         Long break
       </SettingsButton>
     </section>
-    <p class="counter">
+    <TimeCounter>
       {{ addZeroToDate(new Date(counter).getMinutes()) }}:{{
         addZeroToDate(new Date(counter).getSeconds())
       }}

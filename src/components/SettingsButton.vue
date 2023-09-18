@@ -1,6 +1,4 @@
-<script setup lang="ts">
-const props = defineProps(['text'])
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <button class="settings-btn"><slot></slot></button>

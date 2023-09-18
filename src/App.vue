@@ -6,7 +6,7 @@ type modeType = 'pomodoro' | 'short' | 'long'
 let intervalId: any
 const ONE_SECOND_IN_MILLISECONDS = 1 * 1000
 const TWENTY_FIVE_MINUTES_IN_MILLISECONDS = 25 * 60 * 1000
-const FIVE_MINUTES_IN_MILLISECONDS = 5 * 60 * 1000
+const FIVE_MINUTES_IN_MILLISECONDS = 1 * 60 * 1000
 const FIFTEEN_MINUTES_IN_MILLISECONDS = 15 * 60 * 1000
 
 const counter = ref(TWENTY_FIVE_MINUTES_IN_MILLISECONDS)
@@ -41,7 +41,7 @@ function startCounter() {
     }
   }
 
-  intervalId = setInterval(decrementCounter, 1000, changeCounter)
+  intervalId = setInterval(decrementCounter, 1000)
 }
 
 function stopCounter() {
@@ -71,37 +71,30 @@ function addZeroToDate(date: number) {
   }
   return date
 }
+import MainButton from './components/MainButton.vue'
+import SettingsButton from './components/SettingsButton.vue'
 </script>
 
 <template>
   <main>
     <section class="mode-selector">
-      <button class="btn" :class="{ active: mode === 'pomodoro' }" @click="setMode('pomodoro')">
+      <SettingsButton :class="{ active: mode === 'pomodoro' }" @click="setMode('pomodoro')">
         Pomodoro
-      </button>
-      <button class="btn" :class="{ active: mode === 'short' }" @click="setMode('short')">
+      </SettingsButton>
+      <SettingsButton class="btn" :class="{ active: mode === 'short' }" @click="setMode('short')">
         Short break
-      </button>
-      <button class="btn" :class="{ active: mode === 'long' }" @click="setMode('long')">
+      </SettingsButton>
+      <SettingsButton class="btn" :class="{ active: mode === 'long' }" @click="setMode('long')">
         Long break
-      </button>
+      </SettingsButton>
     </section>
     <p class="counter">
       {{ addZeroToDate(new Date(counter).getMinutes()) }}:{{
         addZeroToDate(new Date(counter).getSeconds())
       }}
     </p>
-
-    <div class="btn start" v-if="state === 'idle'">
-      <button class="btn start" @click="startCounter">
-        <p>START</p>
-      </button>
-    </div>
-    <div class="btn start" v-else>
-      <button class="btn start" @click="stopCounter">
-        <p>STOP</p>
-      </button>
-    </div>
+    <MainButton @click="startCounter">START</MainButton>
+    <MainButton @click="stopCounter">STOP</MainButton>
   </main>
 </template>
 
@@ -120,24 +113,6 @@ main {
 .mode-selector {
   display: flex;
   gap: 1rem;
-}
-
-.btn {
-  background-color: azure;
-  border: 0;
-  font-size: medium;
-  border-radius: 0.3rem;
-  padding: 0.5rem;
-  cursor: pointer;
-}
-.active {
-  background-color: cornflowerblue;
-}
-.btn:hover {
-  opacity: 0.8;
-}
-.btn:active {
-  transform: scale(0.98);
 }
 
 .start {

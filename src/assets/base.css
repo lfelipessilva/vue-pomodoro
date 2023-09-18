@@ -61,17 +61,18 @@
 @font-face {
   font-family: 'Roboto';
   src: url('https: //fonts.googleapis.com/css2?family=Fira+Code:wght@500;600&family=Roboto:wght@400;500;700&display=swap');
-
 }
 
 body {
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
-  transition: color 0.5s,
+  transition:
+    color 0.5s,
     background-color 0.5s;
   line-height: 1.6;
-  font-family: Roboto,
+  font-family:
+    Roboto,
     Inter,
     -apple-system,
     BlinkMacSystemFont,
